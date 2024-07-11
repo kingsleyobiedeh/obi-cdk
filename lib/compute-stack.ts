@@ -154,7 +154,7 @@ export class ComputeStack extends cdk.Stack {
             image: ecs.ContainerImage.fromRegistry("amazon/amazon-ecs-sample"),
             },
             taskSubnets: {
-            subnets: [ec2.Subnet.fromSubnetId(this, 'subnet', 'VpcISOLATEDSubnet1Subnet80F07FA0')],
+            subnets: subnets,
             },
             loadBalancerName: 'application-lb-name',
         });
