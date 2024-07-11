@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
-// import { ObiCdkStack } from '../lib/obi-cdk-stack';
 import { PipelineStack } from '../lib/pipeline-stack';
 import * as fs from 'fs';
 
