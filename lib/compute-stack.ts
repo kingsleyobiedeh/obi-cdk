@@ -156,7 +156,7 @@ export class ComputeStack extends cdk.Stack {
             taskSubnets: {
             subnets: subnets,
             },
-            loadBalancerName: 'application-lb-name',
+            loadBalancerName: 'obi-lb-name',
         });
     }
 }
