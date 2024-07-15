@@ -1,6 +1,10 @@
 # Welcome to CDK TypeScript project by obiorah for BMO
 
-# Pre-requisite for set up
+## 3-tier Architecture
+
+## Codepipeline Architecture
+
+## Pre-requisite for set up
 1. Install AWS CLI
 2. Have an AWS Account
 3. Install Nodejs (16)
@@ -8,7 +12,7 @@
 5. Install AWS CDK CLI `npm install -g aws-cdk`
 6. Configure AWS security credentials for the CDK CLI.
 
-# Usage
+## Usage
 1. Clone this repository
 2. Modify `cdk.context.json` with your environments and account details on stage. You can remove or add more stages.
 3. Ensure AWS security credential is configured
@@ -17,10 +21,6 @@
 6. Go into the dev AWS account to confirm that the pipeline has been created.
 7. Modify/Update your environment/AWS account variables in the file `constants/constants.ts`
 7. Modify or add new stacks/stages to the pipeline in the folder `lib/`
-
-# 3-tier Architecture
-
-# Codepipeline Architecture
 
 
 
