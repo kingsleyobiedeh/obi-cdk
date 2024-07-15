@@ -1,6 +1,6 @@
-export const HOST_NAME = 'notification'
+export const HOST_NAME = 'obi-bmo'
 
-export const ALIAS_NAME = 'WNS'
+export const ALIAS_NAME = 'obi-bmo'
 
 interface EnvironmentConfig {
     env: string;
@@ -95,7 +95,7 @@ export const EnvironmentConfigs: Record<string, EnvironmentConfig> = {
 };
 
 export const ROUTE_53 =  {
-    port: "443",
+    port: "80",
     resourcePath: '/health',
     requestInterval: "30",
     failureThreshold: "3",
@@ -104,142 +104,7 @@ export const ROUTE_53 =  {
     failover: 'PRIMARY',
 }
 
-export const SERVICE: Record<string, Record<string, number>> = {
-  DEV: {
-    desiredCount: 1,
-    minHealthyPercent: 75,
-    maxHealthyPercent: 200,
-    healthCheckGracePeriod: 30,
-  },
-  INT: {
-    desiredCount: 2,
-    minHealthyPercent: 75,
-    maxHealthyPercent: 200,
-    healthCheckGracePeriod: 30,
-  },
-  STG: {
-    desiredCount: 2,
-    minHealthyPercent: 75,
-    maxHealthyPercent: 200,
-    healthCheckGracePeriod: 30,
-  },
-  PRD: {
-    desiredCount: 2,
-    minHealthyPercent: 75,
-    maxHealthyPercent: 200,
-    healthCheckGracePeriod: 30,
-  },
-}
 
-export const AUTOSCALING: Record<string, Record<string, number>> = {
-  DEV: {
-    minCapacity: 1,
-    maxCapacity: 2,
-    upper: 20,
-    upperchange: -1,
-    lower: 70,
-    lowerchange: +1,
-    cooldown: 60,
-    datapointsToAlarm: 2,
-    evaluationPeriods: 2,
-    period: 1,
-    targetValue: 80,
-  },
-  INT: {
-    minCapacity: 2,
-    maxCapacity: 5,
-    upper: 20,
-    upperchange: -1,
-    lower: 70,
-    lowerchange: +1,
-    cooldown: 60,
-    datapointsToAlarm: 2,
-    evaluationPeriods: 2,
-    period: 1,
-    targetValue: 80,
-  },
-  STG: {
-    minCapacity: 2,
-    maxCapacity: 5,
-    upper: 20,
-    upperchange: -1,
-    lower: 70,
-    lowerchange: +1,
-    cooldown: 60,
-    datapointsToAlarm: 2,
-    evaluationPeriods: 2,
-    period: 1,
-    targetValue: 80,
-  },
-  PRD: {
-    minCapacity: 2,
-    maxCapacity: 5,
-    upper: 20,
-    upperchange: -1,
-    lower: 70,
-    lowerchange: +1,
-    cooldown: 60,
-    datapointsToAlarm: 2,
-    evaluationPeriods: 2,
-    period: 1,
-    targetValue: 80,
-  },
-}
-
-export const TG = {
-    port: 80,
-    containerPort: 8080,
-    path: '/actuator/health',
-    interval: 30,
-    timeout: 10,
-    healthyThresholdCount: 3,
-    unhealthyThresholdCount: 3,
-    healthyHttpCodes: '200-299',
-}
-
-export const TASK_DEFINITION = {
-    cpu: 2048,
-    memoryLimitMiB: 4096,
-    family: 'notification-service-td',
-}
-
-type SecurityGroupRule = {
-  protocol: 'HTTPS' | 'HTTP' | 'Custom TCP'
-  port: number
-  sourceIp: string
-}
-
-export const LB_SG_RULE: SecurityGroupRule[] = [
-  { protocol: 'HTTPS', port: 443, sourceIp: '107.23.255.0/26' },
-  { protocol: 'HTTPS', port: 443, sourceIp: '15.177.0.0/18' },
-  { protocol: 'HTTPS', port: 443, sourceIp: '176.34.159.192/26' },
-  { protocol: 'HTTPS', port: 443, sourceIp: '177.71.207.128/26' },
-  { protocol: 'HTTPS', port: 443, sourceIp: '54.183.255.128/26' },
-  { protocol: 'HTTPS', port: 443, sourceIp: '54.228.16.0/26' },
-  { protocol: 'HTTPS', port: 443, sourceIp: '54.232.40.64/26' },
-  { protocol: 'HTTPS', port: 443, sourceIp: '54.241.32.64/26' },
-  { protocol: 'HTTPS', port: 443, sourceIp: '54.243.31.192/26' },
-  { protocol: 'HTTPS', port: 443, sourceIp: '54.244.52.192/26' },
-  { protocol: 'HTTPS', port: 443, sourceIp: '54.245.168.0/26' },
-  { protocol: 'HTTPS', port: 443, sourceIp: '54.248.220.0/26' },
-  { protocol: 'HTTPS', port: 443, sourceIp: '54.250.253.192/26' },
-  { protocol: 'HTTPS', port: 443, sourceIp: '54.251.31.128/26' },
-  { protocol: 'HTTPS', port: 443, sourceIp: '54.252.254.192/26' },
-  { protocol: 'HTTPS', port: 443, sourceIp: '54.252.79.128/26' },
-  { protocol: 'HTTPS', port: 443, sourceIp: '54.255.254.192/26' },
-  { protocol: 'HTTPS', port: 443, sourceIp: '10.0.0.0/8' },
-  { protocol: 'Custom TCP', port: 8443, sourceIp: '10.0.0.0/8' },
-  { protocol: 'Custom TCP', port: 8443, sourceIp: '132.188.0.0/16' },
-  { protocol: 'HTTPS', port: 443, sourceIp: '132.188.0.0/16' },
-  { protocol: 'HTTPS', port: 443, sourceIp: '203.202.234.0/24' },
-  { protocol: 'Custom TCP', port: 8443, sourceIp: '203.202.234.0/24' },
-  { protocol: 'HTTPS', port: 443, sourceIp: '50.112.147.32/32' },
-  { protocol: 'Custom TCP', port: 8443, sourceIp: '50.112.147.32/32' },
-  { protocol: 'Custom TCP', port: 8443, sourceIp: '50.112.147.42/32' },
-  { protocol: 'HTTPS', port: 443, sourceIp: '50.112.147.42/32' },
-  { protocol: 'Custom TCP', port: 8443, sourceIp: '54.71.82.69/32' },
-  { protocol: 'HTTPS', port: 443, sourceIp: '54.71.82.69/32' },
-]
 
 export const FAILOVER_MODE: Record<string, string> = {
     "us-east-1": 'SECONDARY',

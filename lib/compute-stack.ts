@@ -6,12 +6,12 @@ import * as ecsPatterns from 'aws-cdk-lib/aws-ecs-patterns';
 import * as ecs from 'aws-cdk-lib/aws-ecs';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as elbv2 from 'aws-cdk-lib/aws-elasticloadbalancingv2';
-import * as route53 from 'aws-cdk-lib/aws-route53'
+import * as ecrasset from 'aws-cdk-lib/aws-ecr-assets';
+import * as route53 from 'aws-cdk-lib/aws-route53';
 import {
     ALIAS_NAME,
     FAILOVER_MODE,
     HOST_NAME,
-    LB_SG_RULE,
     ROUTE_53,
     EnvironmentConfigs
   } from '../constants/constants'
@@ -56,25 +56,16 @@ export class ComputeStack extends cdk.Stack {
         ec2.Subnet.fromSubnetId(this, 'subnet1', subnetId1),
         ec2.Subnet.fromSubnetId(this, 'subnet2', subnetId2),
         ]
-        // LB subnet
-        const LbSubnets = [
-        ec2.Subnet.fromSubnetId(this, 'subnetLb1', subnetLb1),
-        ec2.Subnet.fromSubnetId(this, 'subnetLb2', subnetLb2),
-        ]
-        // LB security group & Ingress rule
-        const securityGroupNameLb = `${ALIAS_NAME}-SgLb`;
-        const securityGroupLb = new ec2.SecurityGroup(this, 'LbSecurityGroup', {
-            securityGroupName: securityGroupNameLb,
-            vpc: vpc,
+
+        // App security group & Ingress rule
+        const securityGroupName = `${ALIAS_NAME}-Sg`;
+        const securityGroup = new ec2.SecurityGroup(this, 'SecurityGroup', {
+            securityGroupName,
+            vpc,
         })
         for (const rule of LB_SG_RULE) {
-        securityGroupLb.addIngressRule(ec2.Peer.ipv4(rule.sourceIp), ec2.Port.tcp(rule.port), 'Allow traffic')
+        securityGroup.addIngressRule(ec2.Peer.ipv4(rule.sourceIp), ec2.Port.tcp(rule.port), 'Allow traffic')
         }
-        new cdk.CfnOutput(this, `LbSecurityGroupId-${ALIAS_NAME}`, {
-        value: securityGroupLb.securityGroupId,
-        exportName: `LbSecurityGroupId-${ALIAS_NAME}`,
-        })
-
     
         // Cluster
         const cluster = new ecs.Cluster(this, 'Cluster', {
@@ -83,16 +74,6 @@ export class ComputeStack extends cdk.Stack {
         clusterName: ALIAS_NAME,
         })
 
-
-        // Application Load balancer, Target group, listener and listener rule
-        // ALB
-        const alb = new elbv2.ApplicationLoadBalancer(this, 'ALB', {
-        vpc: vpc,
-        vpcSubnets: { subnets: LbSubnets },
-        securityGroup: securityGroupLb,
-        loadBalancerName: `${ALIAS_NAME}`,
-        //internetFacing: false,
-        })
 
         //// Create Route53 routing resources for our LoadBalancer
         const hostName = HOST_NAME
@@ -145,18 +126,34 @@ export class ComputeStack extends cdk.Stack {
         // })
         // globalAlias.node.addDependency(ARecord)
 
+        // Build dockerfile and publish to ecr
+        const dockerImageAsset = new ecrasset.DockerImageAsset(this, 'appDockerImage', {
+            directory: '.',
+            target: 'bundle',
+        })
+
+          
+
+        // Use ecs pattern loadbalanced fargate
         const loadBalancedFargateService = new ecsPatterns.ApplicationLoadBalancedFargateService(this, 'Service', {
             cluster,
+            
             memoryLimitMiB: 1024,
-            desiredCount: 1,
+            desiredCount: 2,
             cpu: 512,
             taskImageOptions: {
-            image: ecs.ContainerImage.fromRegistry("amazon/amazon-ecs-sample"),
+                image: ecs.ContainerImage.fromDockerImageAsset(dockerImageAsset),
             },
             taskSubnets: {
             subnets: subnets,
             },
-            loadBalancerName: 'obi-lb-name',
+            // domainName: "woo.obi-bmo.com",
+            // domainZone: "obi-bmo.com",
+            minHealthyPercent: 2,
+            maxHealthyPercent: 4,
+            protocol: elbv2.ApplicationProtocol.HTTP,
+            loadBalancerName: ALIAS_NAME,
+            securityGroups: [securityGroup],
         });
     }
 }
