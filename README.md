@@ -4,7 +4,7 @@
 ![cdk codepipeline architecture architecture](assets/codepipeline_architecture.png)
 
 ## 3-tier Architecture
-![3-tier application architecture](assests/app_architecture.png)
+![3-tier application architecture](assets/app_architecture.png)
 
 ## Pre-requisite for set up
 1. Install AWS CLI
