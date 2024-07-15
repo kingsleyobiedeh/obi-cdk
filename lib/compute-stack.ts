@@ -1,7 +1,5 @@
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
-import { CodePipeline, CodePipelineSource, ShellStep } from 'aws-cdk-lib/pipelines';
-import { Function, InlineCode, Runtime } from 'aws-cdk-lib/aws-lambda';
 import * as ecsPatterns from 'aws-cdk-lib/aws-ecs-patterns';
 import * as ecs from 'aws-cdk-lib/aws-ecs';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
@@ -24,23 +22,11 @@ export class ComputeStack extends cdk.Stack {
     readonly envName: string
     constructor(scope: Construct, id: string, props?: ComputeStackProps) {
         super(scope, id, props);
-        
 
-
-        /* ****************************************************** */
-        /* *************** Env/Branch specific suffix *********** */
-        /* ****************************************************** */
-        
-        /* istanbul ignore next */
-        console.log(this.account)
-        console.log(this.region)
         const config = EnvironmentConfigs[this.account];
-        console.log(config.appSubnets[this.region][0])
         const vpcId = config.vpcId[this.region]
         const subnetId1 = config.appSubnets[this.region][0]
         const subnetId2 = config.appSubnets[this.region][1]
-        const subnetLb1 = config.lbSubnets[this.region][0]
-        const subnetLb2 = config.lbSubnets[this.region][1]
         const route_53 = ROUTE_53
         const DOMAIN_NAMES = config.domainName
         // const zoneName = DOMAIN_NAMES
@@ -123,25 +109,22 @@ export class ComputeStack extends cdk.Stack {
         // })
         // globalAlias.node.addDependency(ARecord)
 
-        // Build dockerfile and publish to ecr. Remove comment if you want build
-        const dockerImageAsset = new ecrasset.DockerImageAsset(this, 'appDockerImage', {
-            directory: '.',
-            target: 'bundle',
-        })
-
-          
+        // Build dockerfile and publish to ecr. Remove comment if you want build from app source code
+        // const dockerImageAsset = new ecrasset.DockerImageAsset(this, 'appDockerImage', {
+        //     directory: '.',
+        //     target: 'bundle',
+        // })
 
         // Use ecs pattern loadbalanced fargate
         const loadBalancedFargateService = new ecsPatterns.ApplicationLoadBalancedFargateService(this, 'Service', {
             cluster,
-            
             memoryLimitMiB: 1024,
             desiredCount: 2,
             cpu: 512,
             taskImageOptions: {
-                // image: ecs.ContainerImage.fromRegistry("amazon/amazon-ecs-sample")
                 // use this dockerImage Asset to do build
-                image: ecs.ContainerImage.fromDockerImageAsset(dockerImageAsset),
+                // image: ecs.ContainerImage.fromDockerImageAsset(dockerImageAsset),
+                image: ecs.ContainerImage.fromRegistry("amazon/amazon-ecs-sample")
             },
             taskSubnets: {
             subnets: subnets,
