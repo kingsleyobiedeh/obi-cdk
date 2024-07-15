@@ -44,7 +44,7 @@ export class DatabaseStack extends cdk.Stack {
         engine: rds.DatabaseClusterEngine.AURORA_MYSQL,
         vpc,
         backupRetention: cdk.Duration.days(7),
-        defaultDatabaseName: 'obi-wooCommerceDB',
+        defaultDatabaseName: 'obiBMO',
         scaling: {
           autoPause: cdk.Duration.minutes(10), // Auto pause after 10 minutes of inactivity
           minCapacity: rds.AuroraCapacityUnit.ACU_2, // Minimum capacity

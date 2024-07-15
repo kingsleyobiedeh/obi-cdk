@@ -63,9 +63,6 @@ export class ComputeStack extends cdk.Stack {
             securityGroupName,
             vpc,
         })
-        for (const rule of LB_SG_RULE) {
-        securityGroup.addIngressRule(ec2.Peer.ipv4(rule.sourceIp), ec2.Port.tcp(rule.port), 'Allow traffic')
-        }
     
         // Cluster
         const cluster = new ecs.Cluster(this, 'Cluster', {
@@ -126,7 +123,7 @@ export class ComputeStack extends cdk.Stack {
         // })
         // globalAlias.node.addDependency(ARecord)
 
-        // Build dockerfile and publish to ecr
+        // Build dockerfile and publish to ecr. Remove comment if you want build
         const dockerImageAsset = new ecrasset.DockerImageAsset(this, 'appDockerImage', {
             directory: '.',
             target: 'bundle',
@@ -142,6 +139,8 @@ export class ComputeStack extends cdk.Stack {
             desiredCount: 2,
             cpu: 512,
             taskImageOptions: {
+                // image: ecs.ContainerImage.fromRegistry("amazon/amazon-ecs-sample")
+                // use this dockerImage Asset to do build
                 image: ecs.ContainerImage.fromDockerImageAsset(dockerImageAsset),
             },
             taskSubnets: {
@@ -149,11 +148,11 @@ export class ComputeStack extends cdk.Stack {
             },
             // domainName: "woo.obi-bmo.com",
             // domainZone: "obi-bmo.com",
-            minHealthyPercent: 2,
-            maxHealthyPercent: 4,
+            minHealthyPercent: 75,
+            maxHealthyPercent: 200,
             protocol: elbv2.ApplicationProtocol.HTTP,
             loadBalancerName: ALIAS_NAME,
-            securityGroups: [securityGroup],
+            // securityGroups: [securityGroup],
         });
     }
 }
