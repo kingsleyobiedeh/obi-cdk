@@ -11,21 +11,20 @@ export class DatabaseStack extends cdk.Stack {
     super(scope, id, props);
 
     const config = EnvironmentConfigs[this.account];
-    const vpcId = config.vpcId[this.region]
-    const subnetId1 = config.appSubnets[this.region][0]
-    const subnetId2 = config.appSubnets[this.region][1]
-
+    const vpcId = config.vpcId[this.region];
+    const subnetId1 = config.appSubnets[this.region][0];
+    const subnetId2 = config.appSubnets[this.region][1];
 
     // Private VPC Subnets and Security Group
     const vpc = ec2.Vpc.fromLookup(this, 'VPC', {
         vpcId: vpcId,
-    })
+    });
 
     // App subnet
     const subnets = [
         ec2.Subnet.fromSubnetId(this, 'subnet1', subnetId1),
         ec2.Subnet.fromSubnetId(this, 'subnet2', subnetId2),
-    ]
+    ];
 
     const securityGroup = new ec2.SecurityGroup(this, 'RdsSecurityGroup', {
         vpc,

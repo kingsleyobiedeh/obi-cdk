@@ -53,8 +53,7 @@ export class PipelineStack extends cdk.Stack {
           // Add each stage to the wave for parallel execution
           wave.addStage(pipelineStage);
 
-          // Add manual approval step to the testing stage
-        //  pipeline.addPost(new ManualApprovalStep('approval'));
+          // TODO Add manual approval step to the testing stage
           
         });
 

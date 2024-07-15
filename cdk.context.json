@@ -1,53 +1,34 @@
 {
   "stages": [
     {
-      "accountId": "471112589625",
-      "envName": "DEV",
-      "region": "us-west-2"
+        "accountId": "471112589111",
+        "envName": "DEV",
+        "region": "us-west-2"
+    },
+    {
+        "accountId": "471112589111",
+        "envName": "DEV",
+        "region": "us-east-1"
+    },
+    {
+        "accountId": "471112589222",
+        "envName": "UAT",
+        "region": "us-west-2"
+    },
+    {
+        "accountId": "471112589222",
+        "envName": "UAT",
+        "region": "us-east-1"
+    },
+    {
+        "accountId": "471112589333",
+        "envName": "PRD",
+        "region": "us-west-2"
+    },
+    {
+        "accountId": "471112589333",
+        "envName": "PRD",
+        "region": "us-east-1"
     }
-  ],
-  "vpc-provider:account=471112589625:filter.vpc-id=vpc-099d7f9286221b2c7:region=us-west-2:returnAsymmetricSubnets=true": {
-    "vpcId": "vpc-099d7f9286221b2c7",
-    "vpcCidrBlock": "10.208.104.0/22",
-    "ownerAccountId": "471112589625",
-    "availabilityZones": [],
-    "subnetGroups": [
-      {
-        "name": "Public",
-        "type": "Public",
-        "subnets": [
-          {
-            "subnetId": "subnet-08c0bc6aa97d5a35c",
-            "cidr": "10.208.106.0/24",
-            "availabilityZone": "us-west-2a",
-            "routeTableId": "rtb-038d5773f7bc6a8f5"
-          },
-          {
-            "subnetId": "subnet-0a34b1e6562d6d99f",
-            "cidr": "10.208.107.0/24",
-            "availabilityZone": "us-west-2b",
-            "routeTableId": "rtb-038d5773f7bc6a8f5"
-          }
-        ]
-      },
-      {
-        "name": "Private",
-        "type": "Private",
-        "subnets": [
-          {
-            "subnetId": "subnet-08240bd5816fc71d0",
-            "cidr": "10.208.104.0/24",
-            "availabilityZone": "us-west-2a",
-            "routeTableId": "rtb-050a3d1fd22a2db13"
-          },
-          {
-            "subnetId": "subnet-002c4ca4fac6e9675",
-            "cidr": "10.208.105.0/24",
-            "availabilityZone": "us-west-2b",
-            "routeTableId": "rtb-095914170db64dec3"
-          }
-        ]
-      }
-    ]
-  }
+  ]
 }

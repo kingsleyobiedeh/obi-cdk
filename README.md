@@ -22,17 +22,7 @@
 5. Deploy cdk codepipeline. Run `npx cdk deploy ObiCdkStack`. [One time setup]
 6. Go into the dev AWS account to confirm that the pipeline has been created.
 7. Modify/Update your environment/AWS account variables in the file `constants/constants.ts`
-7. Modify or add new stacks/stages to the pipeline in the folder `lib/`
-
-
-
-
-
-
-
-This is a blank project for CDK development with TypeScript.
-
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+8. Modify or add new stacks/stages to the pipeline in the folder `lib/`
 
 ## Useful commands
 
